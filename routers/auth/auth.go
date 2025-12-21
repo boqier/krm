@@ -13,7 +13,7 @@ func logout(authGroup *gin.RouterGroup) {
 }
 
 // 注册路由
-func RegisterAuthRouters(r *gin.RouterGroup) {
+func RegisterSubRouters(r *gin.RouterGroup) {
 	//登录
 	authGroup := r.Group("/auth")
 	login(authGroup)

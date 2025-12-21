@@ -27,11 +27,12 @@ func NewReturnDate() ReturnDate {
 }
 
 var (
-	Port            string
-	JWTSecret       string
-	JWT_EXPIRE_TIME int64  //TOKEN 过期时间（分钟）
-	Username        string //默认admin
-	Password        string //默认123456
+	Port              string
+	JWTSecret         string
+	JWT_EXPIRE_TIME   int64  //TOKEN 过期时间（分钟）
+	Username          string //默认admin
+	Password          string //默认123456
+	MetadataNamespace string //元数据存储namespqce
 )
 
 func initLogConfig(logLevel string) {
@@ -78,4 +79,10 @@ func init() {
 	viper.SetDefault("PASSWORD", "E10ADC3949BA59ABBE56E057F20F883E")
 	Password = viper.GetString("PASSWORD")
 	logs.Info(map[string]interface{}{"module": "config"}, "PASSWORD："+Password)
+
+	//获取元数据存储namespace
+	viper.SetDefault("METADATA_NAMESPACE", "krm")
+	MetadataNamespace = viper.GetString("METADATA_NAMESPACE")
+	logs.Info(map[string]interface{}{"module": "config"}, "METADATA_NAMESPACE："+MetadataNamespace)
+
 }

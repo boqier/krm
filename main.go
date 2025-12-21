@@ -1,21 +1,19 @@
 package main
 
 import (
+	"github.com/boqier/krm/config"
+	_ "github.com/boqier/krm/controllers/initcontroller"
+	"github.com/boqier/krm/middlerwares"
+	"github.com/boqier/krm/routers"
 	"github.com/boqier/krm/utils/logs"
-	kubernetes "k8s.io/client-go/kubernetes"
-	clientcmd "k8s.io/client-go/tools/clientcmd"
+	gin "github.com/gin-gonic/gin"
 )
 
 func main() {
-	config, err := clientcmd.BuildConfigFromFlags("", "/etc/rancher/k3s/k3s.yaml")
-	if err != nil {
-		logs.Error(map[string]interface{}{"module": "main"}, "读取k3s.yaml失败")
-		panic(err)
-	}
-	clientSet, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err)
-		logs.Error(map[string]interface{}{"module": "main"}, "创建clientSet失败")
-	}
-
+	//1.加载配置
+	r := gin.Default()
+	r.Use(middlerwares.JWTAuth)
+	routers.RegisterRouters(r)
+	logs.Info(map[string]interface{}{"port": config.Port}, "krm server start at :%d")
+	r.Run(":" + config.Port)
 }
