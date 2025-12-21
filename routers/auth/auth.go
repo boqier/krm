@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/boqier/gin-scaffold/controllers/auth"
+	"github.com/boqier/krm/controllers/auth"
 	"github.com/gin-gonic/gin"
 )
 

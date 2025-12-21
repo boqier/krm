@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/boqier/gin-scaffold/routers/auth"
+	"github.com/boqier/krm/routers/auth"
 	"github.com/gin-gonic/gin"
 )
 

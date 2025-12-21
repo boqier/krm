@@ -3,8 +3,8 @@ package jwtutil
 import (
 	"time"
 
-	"github.com/boqier/gin-scaffold/config"
-	"github.com/boqier/gin-scaffold/utils/logs"
+	"github.com/boqier/krm/config"
+	"github.com/boqier/krm/utils/logs"
 	"github.com/golang-jwt/jwt/v5"
 )
 

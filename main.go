@@ -1,18 +1,21 @@
 package main
 
 import (
-	"github.com/boqier/gin-scaffold/config"
-	"github.com/boqier/gin-scaffold/middlerwares"
-	"github.com/boqier/gin-scaffold/routers"
-	"github.com/boqier/gin-scaffold/utils/logs"
-	"github.com/gin-gonic/gin"
+	"github.com/boqier/krm/utils/logs"
+	kubernetes "k8s.io/client-go/kubernetes"
+	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
 
 func main() {
-	logs.Info(map[string]interface{}{"module": "main"}, "正在启动服务...")
-	r := gin.Default()
-	//注册中间件
-	r.Use(middlerwares.JWTAuth)
-	routers.RegisterRouters(r)
-	r.Run("0.0.0.0:" + config.Port)
+	config, err := clientcmd.BuildConfigFromFlags("", "/etc/rancher/k3s/k3s.yaml")
+	if err != nil {
+		logs.Error(map[string]interface{}{"module": "main"}, "读取k3s.yaml失败")
+		panic(err)
+	}
+	clientSet, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		panic(err)
+		logs.Error(map[string]interface{}{"module": "main"}, "创建clientSet失败")
+	}
+
 }

@@ -3,7 +3,7 @@ package config
 import (
 	"strconv"
 
-	"github.com/boqier/gin-scaffold/utils/logs"
+	"github.com/boqier/krm/utils/logs"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )

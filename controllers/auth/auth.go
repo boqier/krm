@@ -3,9 +3,9 @@ package auth
 import (
 	"net/http"
 
-	"github.com/boqier/gin-scaffold/config"
-	"github.com/boqier/gin-scaffold/utils/jwtutil"
-	"github.com/boqier/gin-scaffold/utils/logs"
+	"github.com/boqier/krm/config"
+	"github.com/boqier/krm/utils/jwtutil"
+	"github.com/boqier/krm/utils/logs"
 	"github.com/gin-gonic/gin"
 )
 
