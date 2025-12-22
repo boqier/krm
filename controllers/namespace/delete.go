@@ -1,36 +1,39 @@
 package namespace
 
 import (
+	"context"
+
 	"github.com/boqier/krm/config"
+	"github.com/boqier/krm/controllers"
 	"github.com/boqier/krm/utils/logs"
 	"github.com/gin-gonic/gin"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func Delete(ctx *gin.Context) {
-	logs.Debug(nil, "删除集群")
-	clusterID := ctx.Query("clusterid")
-	if clusterID == "" {
-		logs.Error(nil, "删除集群失败,集群ID不能为空")
+	//获取客户端
+	clientSet, basicInfo, err := controllers.GetClientSet(ctx)
+	if err != nil {
 		returnData := config.NewReturnDate()
 		returnData.Status = 400
-		returnData.Message = "删除集群失败,集群ID不能为空"
+		returnData.Message = err.Error()
 		ctx.JSON(200, returnData)
 		return
 	}
-	logs.Info(map[string]interface{}{"集群ID": clusterID}, "开始删除集群")
-	err := config.ClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).Delete(ctx, clusterID, metav1.DeleteOptions{})
+	var namespace corev1.Namespace
+	namespace.Name = basicInfo.Name
+	err = clientSet.CoreV1().Namespaces().Delete(context.TODO(), namespace.Name, metav1.DeleteOptions{})
 	if err != nil {
-		logs.Error(map[string]interface{}{"集群ID": clusterID}, "删除集群失败")
 		returnData := config.NewReturnDate()
 		returnData.Status = 400
-		returnData.Message = "删除集群失败，请确认集群是否存在"
+		logs.Error(map[string]interface{}{"namespace": namespace.Name}, err.Error())
+		returnData.Message = "删除namespace失败"
 		ctx.JSON(200, returnData)
 		return
 	}
 	returnData := config.NewReturnDate()
 	returnData.Status = 200
-	returnData.Message = "删除集群成功"
+	returnData.Message = "删除命名空间成功"
 	ctx.JSON(200, returnData)
-	logs.Info(map[string]interface{}{"集群ID": clusterID}, "删除集群成功")
 }

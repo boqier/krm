@@ -1,4 +1,4 @@
-package namespace
+package temp
 
 import (
 	"github.com/gin-gonic/gin"
