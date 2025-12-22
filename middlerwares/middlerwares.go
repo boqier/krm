@@ -34,3 +34,17 @@ func JWTAuth(r *gin.Context) {
 	r.Next()
 
 }
+
+// 解决跨域请求问题
+func CORS(r *gin.Context) {
+	r.Header("Access-Control-Allow-Origin", "*")
+	r.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
+	r.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+	r.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Cache-Control, Content-Language, Content-Type")
+	r.Header("Access-Control-Allow-Credentials", "true")
+	if r.Request.Method == "OPTIONS" {
+		r.AbortWithStatus(200)
+	} else {
+		r.Next()
+	}
+}

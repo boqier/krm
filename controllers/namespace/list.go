@@ -1,35 +1,38 @@
 package namespace
 
 import (
+	"context"
+
 	"github.com/boqier/krm/config"
-	"github.com/boqier/krm/utils/logs"
+	"github.com/boqier/krm/controllers"
 	"github.com/gin-gonic/gin"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func List(ctx *gin.Context) {
-	logs.Debug(nil, "获取集群列表")
-	ListOptions := metav1.ListOptions{
-		LabelSelector: "kubeasy.com/cluster.metadata=true",
-	}
-	secrets, err := config.ClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).List(ctx, ListOptions)
+	//获取客户端
+	clientSet, _, err := controllers.GetClientSet(ctx, nil)
 	if err != nil {
-		logs.Error(nil, "获取集群列表失败")
 		returnData := config.NewReturnDate()
-		returnData.Status = 500
-		returnData.Message = "获取集群列表失败"
-		ctx.JSON(500, returnData)
+		returnData.Status = 400
+		returnData.Message = err.Error()
+		ctx.JSON(200, returnData)
 		return
 	}
-	ClusterList := []map[string]string{}
-	for _, v := range secrets.Items {
-		anno := v.Annotations
-		ClusterList = append(ClusterList, anno)
-	}
 
+	NamespaceList, err := clientSet.CoreV1().Namespaces().List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		returnData := config.NewReturnDate()
+		returnData.Status = 400
+		returnData.Message = err.Error()
+		ctx.JSON(200, returnData)
+		return
+	}
 	returnData := config.NewReturnDate()
 	returnData.Status = 200
-	returnData.Data["items"] = ClusterList
-	returnData.Message = "获取集群列表成功"
+	returnData.Message = "获取命名空间成功"
+	returnData.Data = map[string]interface{}{
+		"namespaceList": NamespaceList.Items,
+	}
 	ctx.JSON(200, returnData)
 }

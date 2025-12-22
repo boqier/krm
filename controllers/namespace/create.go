@@ -14,7 +14,7 @@ import (
 func Create(ctx *gin.Context) {
 
 	//获取客户端
-	clientSet, basicInfo, err := controllers.GetClientSet(ctx)
+	clientSet, basicInfo, err := controllers.GetClientSet(ctx, nil)
 	if err != nil {
 		returnData := config.NewReturnDate()
 		returnData.Status = 400

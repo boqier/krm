@@ -12,6 +12,7 @@ import (
 func main() {
 	//1.加载配置
 	r := gin.Default()
+	r.Use(middlerwares.CORS)
 	r.Use(middlerwares.JWTAuth)
 	routers.RegisterRouters(r)
 	logs.Info(map[string]interface{}{"port": config.Port}, "krm server start at :%d")

@@ -11,8 +11,9 @@ import (
 )
 
 // BaseInit 初始化客户端
-func GetClientSet(context *gin.Context) (*kubernetes.Clientset, BasicInfo, error) {
+func GetClientSet(context *gin.Context, item interface{}) (*kubernetes.Clientset, BasicInfo, error) {
 	var basicInfo BasicInfo
+	basicInfo.Item = item
 	var err error
 	requestMethod := context.Request.Method
 	if requestMethod == "GET" {
@@ -30,6 +31,7 @@ func GetClientSet(context *gin.Context) (*kubernetes.Clientset, BasicInfo, error
 	if basicInfo.ClusterID == "" {
 		return nil, basicInfo, errors.New("请求出错123")
 	}
+
 	kubeconfig := config.ClusterKubeconfig[basicInfo.ClusterID]
 	restConfig, err := clientcmd.RESTConfigFromKubeConfig([]byte(kubeconfig))
 	if err != nil {
