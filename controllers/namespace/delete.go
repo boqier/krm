@@ -1,4 +1,4 @@
-package cluster
+package namespace
 
 import (
 	"github.com/boqier/krm/config"
@@ -28,10 +28,6 @@ func Delete(ctx *gin.Context) {
 		ctx.JSON(200, returnData)
 		return
 	}
-	//删除集群时删除kubeconfig配置
-	logs.Info(map[string]interface{}{"集群ID": clusterID}, "删除集群kubeconfig配置")
-	delete(config.ClusterKubeconfig, clusterID)
-
 	returnData := config.NewReturnDate()
 	returnData.Status = 200
 	returnData.Message = "删除集群成功"

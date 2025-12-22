@@ -1,4 +1,4 @@
-package cluster
+package namespace
 
 import (
 	"github.com/boqier/krm/config"
@@ -10,7 +10,7 @@ import (
 func List(ctx *gin.Context) {
 	logs.Debug(nil, "获取集群列表")
 	ListOptions := metav1.ListOptions{
-		LabelSelector: config.ClusterConfigSecretLabelKey + "=" + config.ClusterConfigSecretLabelValue,
+		LabelSelector: "kubeasy.com/cluster.metadata=true",
 	}
 	secrets, err := config.ClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).List(ctx, ListOptions)
 	if err != nil {

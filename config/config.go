@@ -6,10 +6,13 @@ import (
 	"github.com/boqier/krm/utils/logs"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"k8s.io/client-go/kubernetes"
 )
 
 const (
-	TimeFormat = "2006-01-02 15:04:05"
+	TimeFormat                           = "2006-01-02 15:04:05"
+	ClusterConfigSecretLabelKey   string = "kubeasy.com/cluster.metadata"
+	ClusterConfigSecretLabelValue string = "true"
 )
 
 type ReturnDate struct {
@@ -29,10 +32,13 @@ func NewReturnDate() ReturnDate {
 var (
 	Port              string
 	JWTSecret         string
-	JWT_EXPIRE_TIME   int64  //TOKEN 过期时间（分钟）
-	Username          string //默认admin
-	Password          string //默认123456
-	MetadataNamespace string //元数据存储namespqce
+	JWT_EXPIRE_TIME   int64                 //TOKEN 过期时间（分钟）
+	Username          string                //默认admin
+	Password          string                //默认123456
+	MetadataNamespace string                //元数据存储namespqce
+	ClusterClientSet  *kubernetes.Clientset //集群客户端
+	ClusterKubeconfig map[string]string     //集群kubeconfig
+
 )
 
 func initLogConfig(logLevel string) {

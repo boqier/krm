@@ -1,4 +1,4 @@
-package cluster
+package namespace
 
 import (
 	"github.com/boqier/krm/config"

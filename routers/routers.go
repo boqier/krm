@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/boqier/krm/routers/auth"
 	"github.com/boqier/krm/routers/cluster"
+	"github.com/boqier/krm/routers/namespace"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,5 +13,5 @@ func RegisterRouters(r *gin.Engine) {
 	apiGroup := r.Group("/api")
 	auth.RegisterSubRouters(apiGroup)
 	cluster.RegisterSubRouters(apiGroup)
-
+	namespace.RegisterSubRouters(apiGroup)
 }
