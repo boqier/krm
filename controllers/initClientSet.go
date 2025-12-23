@@ -31,6 +31,9 @@ func GetClientSet(context *gin.Context, item interface{}) (*kubernetes.Clientset
 	if basicInfo.ClusterID == "" {
 		return nil, basicInfo, errors.New("请求出错123")
 	}
+	if basicInfo.Namespace == "" {
+		basicInfo.Namespace = "default"
+	}
 
 	kubeconfig := config.ClusterKubeconfig[basicInfo.ClusterID]
 	restConfig, err := clientcmd.RESTConfigFromKubeConfig([]byte(kubeconfig))
